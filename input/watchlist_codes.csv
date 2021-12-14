@@ -1,0 +1,76 @@
+﻿NAME,STOCK_SYMBOL,SOURCE,SUB_SOURCE,TGT_BUY_PRICE
+Asian Paints,ASIANPAINT,M,CC,0
+Berger Paints,BERGEPAINT,M,CC,0
+Pidilite,PIDILITIND,M,CC,0
+HDFC bank,HDFCBANK,M,CC,0
+Dr Lal,LALPATHLAB,M,CC,0
+ITC,ITC,X,X,0
+Nestle,NESTLEIND,M,CC,0
+Kotak Mahindra,KOTAKBANK,M,CC,0
+Bajaj Finance,BAJFINANCE,M,CC,0
+Divis Lab,DIVISLAB,M,CC,0
+Page Indutries,PAGEIND,M,CC,0
+Relaxo,RELAXO,M,CC,0
+infoedge,NAUKRI,M,X,0
+Alkyl Amines,ALKYLAMINE,M,LC,0
+Garware Technical Fibres Ltd.,GARFIBRES,M,LC,0
+GMM,GMMPFAUDLR,M,LC,0
+Dr Reddy,DRREDDY,M,X,0
+Music Broadcast,RADIOCITY,M,LC,0
+Caplin Point Laboratories Ltd.,CAPLIPOINT,X,X,0
+ICICI Bank,ICICIBANK,F,F,360
+SBI,SBIN,X,X,0
+Abbott India,ABBOTINDIA,M,CC,0
+TCS,TCS,M,X,0
+Infosys,INFY,M,X,0
+Maruti,MARUTI,M,X,0
+Reliance,RELIANCE,X,X,0
+Suprajit Engineering,SUPRAJIT,M,LC,0
+PPAP,PPAP,M,LC,0
+Sterling Tools,STERTOOLS,M,LC,0
+Britania,BRITANNIA,M,X,0
+Godrej Consumer Products Limited,GODREJCP,F,F,460
+Godrej Industries,GODREJIND,F,F,543
+Ultramarine & Pigments Ltd.,ULTRMARINE,M,LC,0
+Vmart,VMART,M,LC,0
+La Opala RG Ltd.,LAOPALA,M,LC,0
+Lumax Industries Ltd.,LUMAXIND,M,LC,0
+DCB Bank,DCBBANK,M,LC,200
+MAS Financial Services Ltd.,MASFIN,M,LC,0
+City Union Bank,CUB,X,X,0
+Care Rating,CARERATING,F,F,922
+MM Forging,MMFL,M,X,0
+Kajaria Tiles,KAJARIACER,M,X,0
+Eicher Motors,EICHERMOT,M,X,0
+Lupin,LUPIN,M,X,0
+"ICICI Lombard(life insurance, general insurance)",ICICIGI,M,X,0
+TV Today Network,TVTODAY,F,F,343
+Hester Bio,HESTERBIO,X,X,0
+Frontier Springs,Frontier Springs,X,X,0
+HDFC Life,HDFCLIFE,M,KC,0
+CL Educate,CLEDUCATE,F,F,135
+Ashiana Housing,ASHIANA,F,F,158
+Wonderla Holidays,WONDERLA,F,F,333
+Sundaram Clayton LTd,SUNCLAYLTD,F,F,30
+NBCC,NBCC,F,F,48
+inox leisure,INOXLEISUR,F,F,425
+MPS,MPSLTD,F,F,524
+TV Today Network,TVTODAY,F,F,343
+Delta Corp,DELTACORP,F,F,140
+Quess corp,QUESS,F,F,495
+Bajaj holding,BAJAJHLDNG,F,F,3600
+Mahindra Holday Resort,MHRIL,F,F,210
+bse,BSE,F,F,600
+Jyothi Laboratories,JYOTHYLAB,F,F,135
+HDFC AMC,HDFCAMC,F,F,2700
+IDFC Ltd,IDFC,F,F,20
+Tata Motors,TATAMOTORS,F,F,100
+Marico,MARICO,F,F,290
+Cadila HealthCare,CADILAHC,F,F,298
+CDSL,CDSL,F,F,260
+Zydus wellness,ZYDUSWELL,F,F,1035
+Info edge,NAUKRI,F,F,2200
+5 Paisa Capital,5PAISA,F,F,187
+Galaxy Surfactants,GALAXYSURF,M,LC,0
+Amrutanjan Health Care,AMRUTANJAN,M,LC,0
+Mold-tek Packaging,MOLDTKPAC,M,LC,0
