@@ -6,6 +6,7 @@ from datetime import date
 from date_time_module import now_asia
 import math
 from input_module import read_from_mysql
+from gsheets import write_to_gsheet
 
 from datetime import datetime
 from pytz import timezone
@@ -179,7 +180,9 @@ print("Starting FnO Lot Size function")
 fno_lot_size = fno_lot_sizes()
 write_to_csv(fno_lot_size, 'fno_lot_size')
 write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
-
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(fno_lot_size, 'gstocks-api', 0)
 
 print("Starting LTP function")
 ltp_stock = ltp_stock('FnO')
@@ -187,6 +190,9 @@ ltp_stock = ltp_stock('FnO')
 write_to_csv(ltp_stock, 'ltp_stock')
 # output to mysql
 write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(ltp_stock, 'gstocks-api', 1)
 
 
 
