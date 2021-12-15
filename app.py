@@ -15,16 +15,13 @@ from input_module import read_from_mysql
 from datetime import datetime, date
 from pytz import timezone
 format = "%Y-%m-%d %H:%M:%S %Z%z"
+from date_time_module import now_asia
 # Current time in UTC
-now_utc = datetime.now(timezone('UTC'))
-now_asia = now_utc.astimezone(timezone('Asia/Kolkata'))
+#now_utc = datetime.now(timezone('UTC'))
+#now_asia = now_utc.astimezone(timezone('Asia/Kolkata'))
 
 # finology_html, finology_overall_rating, finology_52_week_high_low,
 # finology_ltp, finology_ratios
-
-# f_n_0_lot_sie
-# fno_lot_size = fno_lot_sizes()
-# print(fno_lot_size)
 
 
 # query_string = query_string = """delete from `smartmeteranalytics.TEST.T2` where 1=1"""
@@ -158,25 +155,6 @@ for stock in stock_list:
     net_profit_trend, latest_net_profit, net_profit_minus_1, net_profit_minus_2, net_profit_minus_3, net_profit_minus_4 = finology_net_profit(
         soup)
 
- #   def dcf_calcualtion(cash_flow_5_years):
- #       # print(cash_flow_5_years)
- #       cash_flow_3_years = cash_flow_5_years[:3]
- #       # print(cash_flow_3_years)
- #       avg_cashflow_3_years = reduce(
- #           lambda x, y: x + y, cash_flow_3_years) / len(cash_flow_3_years)
-#        for i in cash_flow_5_years[:-2]:
-#            print(i)
-#            cashflow_growth_rate = ((cash_flow_5_years[i] -
-#                                     cash_flow_5_years[i+1])*100) / len(cash_flow_5_years[:-2])
-#            print(cashflow_growth_rate)
-#            cagr_rate = cagr_rate.append(cashflow_growth_rate)
-#        cagr_rate_avg = reduce(
-#            lambda x, y: x + y, cagr_rate) / len(cagr_rate)
-#        print(cagr_rate_avg)
-#        return avg_cashflow_3_years
-
-    # intrinsic_val = dcf_calcualtion(cash_flow_5_years)
-    # print(intrinsic_val)
 
 # combining columns together
     tup1 = (now_asia, sector, stock_symbol, stock_name, market_cap, div_yield, debt, icr, promoter_holding, pledged_holding,

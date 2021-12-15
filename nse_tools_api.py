@@ -1,7 +1,7 @@
 from nsetools import Nse
 from pprint import pprint
 import pandas as pd
-#from output_module import write_to_csv, write_to_mysql
+from output_module import write_to_csv, write_to_mysql
 from datetime import date
 from date_time_module import now_asia
 import math
@@ -42,18 +42,27 @@ def fno_lot_sizes():
     return fno_lot_size
 
 
-def ltp_stock():
-    # for all stocks
-    #    nse = Nse()
-    #    stock_symbol = get_stock_symbol()
+def ltp_stock(LtpStcoks):
+    nse = Nse()
+    if LtpStcoks == 'All':
+        # for all stocks
+        stock_symbol = get_stock_symbol()
+    elif LtpStcoks == 'FnO':
+        # for only fno stocks
+        query_result = read_from_mysql(        # "select STOCK_SYMBOL,LTP,150000 from v_stocks_detail where FNO_FLAG='Y'")
+        "select STOCK_SYMBOL from FNO_LOT_SIZE where STOCK_SYMBOL not in ('FINNIFTY','NIFTY', 'BANKNIFTY')")
 
-    # for only fno stocks
-    query_result = read_from_mysql(        # "select STOCK_SYMBOL,LTP,150000 from v_stocks_detail where FNO_FLAG='Y'")
-        "select STOCK_SYMBOL from T_STOCK_SYMBOL_MASTER where STOCK_SYMBOL not in ('NIFTY', 'BANKNIFTY')")
-
-    query_list = list(sum(query_result, ()))
-    stock_symbol = query_list
+        query_list = list(sum(query_result, ()))
+        stock_symbol = query_list
   # stock_symbol = stock_symbol[:2]
+    elif LtpStcoks == 'Master':
+        # for only fno stocks
+        query_result = read_from_mysql(        # "select STOCK_SYMBOL,LTP,150000 from v_stocks_detail where FNO_FLAG='Y'")
+        "select STOCK_SYMBOL from T_STOCK_SYMBOL_MASTER where STOCK_SYMBOL not in ('FINNIFTY','NIFTY', 'BANKNIFTY')")
+
+        query_list = list(sum(query_result, ()))
+        stock_symbol = query_list
+
 
     temp_dict = {}
     for symbol in stock_symbol:
@@ -166,21 +175,29 @@ def india_vix():
 
 
 # call function
-# ltp_stock = ltp_stock()
+print("Starting FnO Lot Size function")
 fno_lot_size = fno_lot_sizes()
+write_to_csv(fno_lot_size, 'fno_lot_size')
+write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
+
+
+print("Starting LTP function")
+ltp_stock = ltp_stock('FnO')
+# output to csv
+write_to_csv(ltp_stock, 'ltp_stock')
+# output to mysql
+write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
+
 
 
 # print(fno_lot_size)
 
-# output to csv
-# write_to_csv(ltp_stock, 'ltp_stock')
-# write_to_csv(fno_lot_size, 'fno_lot_size')
 
 
-# output to mysql
-# write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
+
+# Write to Gsheet
+#write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
 #write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
-
 
 # q = nse.get_quote('LALPATHLAB')
 # print(q)
