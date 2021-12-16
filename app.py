@@ -64,7 +64,7 @@ stock_list = nse_list
 # stock_list = IWU_SCRIP_LIST
 # stock_list = ['CHEMCON']
 
-stock_list = stock_list[:5]
+#stock_list = stock_list[:5]
 # stock_list = ['RBLBANK']
 
 stock_list = list(dict.fromkeys(stock_list))
@@ -87,9 +87,9 @@ stock_list_df = stock_list_df.append(index_list_df)
 write_to_mysql(stock_list_df, 't_stock_symbol_master', 'replace')
 
 # writing fno stocklist into fno master table
-print('writing fno stock list to master table')
-fno_lot_size = fno_lot_sizes()
-print(fno_lot_size)
+#print('writing fno stock list to master table')
+#fno_lot_size = fno_lot_sizes()
+#print(fno_lot_size)
 
 
 # Starting finology
@@ -289,8 +289,8 @@ write_to_mysql(data_out, 'stocks_detail', 'replace')
 # write_to_csv(top_losers, 'top_losers')
 
 # ltp_stock
-ltp_stock = ltp_stock()
-write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
+#ltp_stock = ltp_stock()
+#write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
 
 
 india_vix = india_vix()
