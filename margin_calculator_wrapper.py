@@ -4,14 +4,24 @@ from input_module import read_from_mysql
 from input_module import exe_in_mysql
 from gsheets import write_to_gsheet
 import pandas as pd
+from option_chain import get_option_chain_data
 
+
+print('Getting Option Chain Data')
+#stocklist = ['NIFTY']
+fno_tuple = read_from_mysql("select STOCK_SYMBOL from fno_lot_size")
+#print(type(fno_tuple))
+fno_list = list(sum(fno_tuple, ()))
+fno_list = ['ADANIENT']
+get_option_chain_data(fno_list)
+print('Option Chain Data Completed ')
 
 # Calling for CE Strikes
+print('Getting Margin data for the Strike Prices ')
 option_key_data = read_from_mysql("select * from V_OPTION_KEY_CE")
 #    "select * from V_OPTION_KEY_CE where STRIKE_PRICE = '33000' and expiryDate = '2021-05-06'")
 
 margin_data_df = get_margin_data(option_key_data)
-
 print(margin_data_df)
 # print(type(margin_data_df))
 # print(margin_data_df.empty)

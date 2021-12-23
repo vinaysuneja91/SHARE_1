@@ -36,7 +36,8 @@ def get_margin_data(option_key_data):
         #         'option_type[]': 'CE', 'strike_price[]': '1360', 'qty[]': '250', 'trade[]': 'sell'}
 
     #    print("Runnig for - ")
-    #    print(data)
+        print(option_key_data_tup)
+        print(data)
         # print(option_key_data[0])
         # print(type(option_key_data[0]))
         # print(res)

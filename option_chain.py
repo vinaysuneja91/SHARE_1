@@ -96,4 +96,3 @@ def get_option_chain_data(stocklist):
 # query_result = read_from_mysql('select STOCK_SYMBOL from M_OPTIONS_MASTER')
 
 
-#stocklist = ['NIFTY']
