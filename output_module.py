@@ -22,7 +22,7 @@ database = 'MYSTOCKS'
 
 
 def write_to_mysql(df, table_name, if_exists):
-    print('write to mysql')
+    print(f"write to mysql-{table_name}")
     engine = create_engine(
         f'mysql+mysqlconnector://{user}:{passw}@{host}:{port}/{database}', echo=False)
     df.to_sql(name=table_name, con=engine,
@@ -31,7 +31,7 @@ def write_to_mysql(df, table_name, if_exists):
 
 
 def read_from_mysql(query):
-    print('read from mysql')
+    print(f"read from mysql-{query}")
     engine = create_engine(
         f'mysql+mysqlconnector://{user}:{passw}@{host}:{port}/{database}', echo=False)
     df.to_sql(name=table_name, con=engine,
