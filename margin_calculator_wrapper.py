@@ -1,18 +1,39 @@
 from margin_calculator import get_margin_data
-from output_module import write_to_mysql
+from output_module import write_to_mysql,write_to_csv
 from input_module import read_from_mysql
 from input_module import exe_in_mysql
 from gsheets import write_to_gsheet
 import pandas as pd
 from option_chain import get_option_chain_data
+from nse_tools_api import fno_lot_sizes, ltp_stock
+from date_time_module import now_asia
 
+# call function
+print("Starting FnO Lot Size function")
+fno_lot_size = fno_lot_sizes()
+write_to_csv(fno_lot_size, 'fno_lot_size')
+write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(fno_lot_size, 'gstocks-api', 0)
+
+print("Starting LTP function")
+ltp_stock = ltp_stock('FnO')
+# output to csv
+write_to_csv(ltp_stock, 'ltp_stock')
+# output to mysql
+write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(ltp_stock, 'gstocks-api', 1)
 
 print('Getting Option Chain Data')
 #stocklist = ['NIFTY']
 fno_tuple = read_from_mysql("select STOCK_SYMBOL from fno_lot_size")
 #print(type(fno_tuple))
 fno_list = list(sum(fno_tuple, ()))
-fno_list = ['ADANIENT']
+#fno_list = fno_list[:10]
+fno_list = ['ADANIPORTS']
 df_ce_data, df_pe_data, df_oi_data = get_option_chain_data(fno_list)
 
 write_to_mysql(df_ce_data, 't_options_ce_live_data', 'replace')
@@ -65,14 +86,14 @@ l1 = read_from_mysql('select * from V_OPTIONS_CC_LIST_FILTERED')
 # print(l1_col)
 
 df = pd.DataFrame(l1, columns=['EXP_MONTH', 'EXP_DATE', 'underlying', 'strikePrice', 'underlyingValue', 'lastPrice', 'PCT_ROI', 'LOT_SIZE',
-                               'LOT_PRICE', 'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT '])
+                                'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT '])
 print(df)
 
 print(type(df))
 
 # write_to_gsheet
 print('Writing to gsheet')
-write_to_gsheet(df, 'gstocks-api', 0)
+write_to_gsheet(df, 'gstocks-api', 2)
 
 l2 = read_from_mysql('select * from V_OPTIONS_CSP_LIST_FILTERED')
 # l1_col = read_from_mysql(
@@ -80,11 +101,21 @@ l2 = read_from_mysql('select * from V_OPTIONS_CSP_LIST_FILTERED')
 # print(l1_col)
 
 df2 = pd.DataFrame(l2, columns=['EXP_MONTH', 'EXP_DATE', 'underlying', 'strikePrice', 'underlyingValue', 'lastPrice', 'PCT_ROI', 'LOT_SIZE',
-                                'LOT_PRICE', 'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT '])
+                                 'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT '])
 print(df2)
 
 print(type(df2))
 
 # write_to_gsheet
 print('Writing to gsheet')
-write_to_gsheet(df2, 'gstocks-api', 1)
+write_to_gsheet(df2, 'gstocks-api', 3)
+
+
+l3 = [now_asia]
+df3 = pd.DataFrame(l3, columns=['LAST_RUN_TS'])
+print(df3)
+print(type(df2))
+
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(df3, 'gstocks-api', 4)

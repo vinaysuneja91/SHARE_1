@@ -175,24 +175,7 @@ def india_vix():
 # write_to_mysql(india_vix, 'india_vix', 'replace')
 
 
-## call function
-#print("Starting FnO Lot Size function")
-#fno_lot_size = fno_lot_sizes()
-#write_to_csv(fno_lot_size, 'fno_lot_size')
-#write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
-## write_to_gsheet
-#print('Writing to gsheet')
-#write_to_gsheet(fno_lot_size, 'gstocks-api', 0)
 
-#print("Starting LTP function")
-#ltp_stock = ltp_stock('FnO')
-## output to csv
-#write_to_csv(ltp_stock, 'ltp_stock')
-## output to mysql
-#write_to_mysql(ltp_stock, 'ltp_stock', 'replace')
-## write_to_gsheet
-#print('Writing to gsheet')
-#write_to_gsheet(ltp_stock, 'gstocks-api', 1)
 
 
 
