@@ -15,7 +15,14 @@ write_to_csv(fno_lot_size, 'fno_lot_size')
 write_to_mysql(fno_lot_size, 'fno_lot_size', 'replace')
 # write_to_gsheet
 print('Writing to gsheet')
-write_to_gsheet(fno_lot_size, 'gstocks-api', 0)
+fno_stocks_lot_prices = read_from_mysql("select d.LIQUID_SNO,STOCK_SYMBOL,LOT_SIZE, LTP \
+                                          , LOT_CURRENT_PRICE,INSERT_TS \
+                                          from v_fno_stocks_lots_prices t \
+                          inner join mystocks.v_options_oi_live_data d on t.STOCK_SYMBOL = d.SCRIP")
+fno_stocks_lot_prices_df = pd.DataFrame(fno_stocks_lot_prices
+                                         , columns=['LIQUID_SNO','STOCK_SYMBOL', 'LOT_SIZE'
+                                                    , 'LTP','LOT_CURRENT_PRICE','INSERT_TS'])
+write_to_gsheet(fno_stocks_lot_prices_df, 'gstocks-api', 0)
 
 print("Starting LTP function")
 ltp_stock = ltp_stock('FnO')
@@ -33,7 +40,7 @@ fno_tuple = read_from_mysql("select STOCK_SYMBOL from fno_lot_size")
 #print(type(fno_tuple))
 fno_list = list(sum(fno_tuple, ()))
 #fno_list = fno_list[:10]
-fno_list = ['ADANIPORTS']
+#fno_list = ['ADANIPORTS']
 df_ce_data, df_pe_data, df_oi_data = get_option_chain_data(fno_list)
 
 write_to_mysql(df_ce_data, 't_options_ce_live_data', 'replace')
