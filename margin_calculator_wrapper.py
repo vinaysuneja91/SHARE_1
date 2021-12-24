@@ -118,7 +118,7 @@ print('Writing to gsheet')
 write_to_gsheet(df2, 'gstocks-api', 3)
 
 
-l3 = [now_asia]
+l3 = read_from_mysql("select current_timestamp")
 df3 = pd.DataFrame(l3, columns=['LAST_RUN_TS'])
 print(df3)
 print(type(df2))
