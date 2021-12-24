@@ -40,7 +40,7 @@ fno_tuple = read_from_mysql("select STOCK_SYMBOL from fno_lot_size")
 #print(type(fno_tuple))
 fno_list = list(sum(fno_tuple, ()))
 #fno_list = fno_list[:10]
-#fno_list = ['ADANIPORTS']
+fno_list = ['NIFTY']
 df_ce_data, df_pe_data, df_oi_data = get_option_chain_data(fno_list)
 
 write_to_mysql(df_ce_data, 't_options_ce_live_data', 'replace')
