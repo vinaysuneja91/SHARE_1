@@ -6,6 +6,7 @@ from gsheets import write_to_gsheet
 import pandas as pd
 from option_chain import get_option_chain_data
 from nse_tools_api import fno_lot_sizes, ltp_stock
+from telegram import telegram_bot_sendtext
 
 from datetime import datetime
 from pytz import timezone
@@ -15,6 +16,11 @@ now_utc = datetime.now(timezone('UTC'))
 now_asia = now_utc.astimezone(timezone('Asia/Kolkata'))
 
 import sys
+
+
+telegram_output = telegram_bot_sendtext("Option Chain and Margin Calc Program Started")
+print(telegram_output)
+
 
 # call function
 print("Starting FnO Lot Size function")
@@ -144,3 +150,7 @@ print(df3)
 # write_to_gsheet
 print('Writing to gsheet')
 write_to_gsheet(df3, 'gstocks-api', 4)
+
+
+telegram_output = telegram_bot_sendtext("Option Chain and Margin Calc Program Completed")
+print(telegram_output)
