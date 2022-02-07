@@ -26,7 +26,11 @@ col_names = [
     "FACE_VALUE",
     "ISIN_NO",
     "INDUSTRY",
-    "INSTRUMENT"
+    "INSTRUMENT",
+    "SECTOR_NAME",
+    "INDUSTRY_NEW_NAME",
+    "IGROUP_NAME",
+    "ISUBGROUP_NAME"
 ]
 
 filename = 'bse_listed_stocks.csv'
@@ -35,7 +39,8 @@ filename = 'bse_listed_stocks.csv'
 def get_bse_list():
     df_bse = read_from_csv(filename, col_names)
     # print(df_bse.head())
-    return df_bse["SECURITY_ID"].tolist()
+    write_to_mysql(df_bse, 't_bse_raw_list', 'replace')
+    #return df_bse["SECURITY_ID"].tolist()
 
 
 def get_bse_list_scrip():

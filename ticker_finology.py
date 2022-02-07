@@ -7,7 +7,7 @@ from nse_tools_api import get_stock_symbol, get_top_gainers_losers
 from output_module import write_to_csv
 # import pprint
 # import lxml.html as lh
-
+import re
 
 def is_number(s):
     try:
@@ -214,12 +214,15 @@ def finology_sector(soup):
    # print(type(html_string))
     if html_string is not None:
         html_string2 = soup.select_one("#mainContent_compinfoId")
-        # print(html_string2)
+        #print(html_string2)
         sector = html_string2.getText().replace(
             " ", "").replace('\n', "").replace('\r', "")
-        # print(sector)
+        #print(sector)
         sector = sector[sector.find('SECTOR:')+7:len(sector)]
-        # print(sector)
+        numbers = re.findall('[0-9]+', sector)
+        #print(numbers)
+        sector = sector[:sector.find(numbers[0])]
+        #print(sector)
     else:
         sector = 'na'
         # print(sector)
@@ -243,7 +246,7 @@ def finology_promoter_holding(soup):
             temp_list.append(html.getText().replace(
                 " ", "").replace('\n', "").replace('\r', ""))
 
-        # print(temp_list)
+        print(temp_list)
         market_cap = temp_list[0]
         # print(market_cap)
         market_cap = market_cap[market_cap.find('Cap')+4:len(market_cap)-3]
@@ -257,6 +260,10 @@ def finology_promoter_holding(soup):
             debt = debt[debt.find('DEBT')+5:len(debt)-3]
         else:
             debt = 0
+
+        price_book = temp_list[4]
+        price_book = price_book[price_book.find('P/B')+3:len(price_book)]
+        #print(price_book)
 
         promoter_holding = temp_list[10]
         promoter_holding = promoter_holding[15:-1]
@@ -273,8 +280,9 @@ def finology_promoter_holding(soup):
         market_cap = 0
         div_yield = 0
         debt = 0
+        price_book = 0
         # print(promoter_holding)
-    return market_cap, div_yield, debt, promoter_holding
+    return market_cap, div_yield, debt, promoter_holding, price_book
 
 
 def finology_icr(soup):

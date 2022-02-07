@@ -31,12 +31,12 @@ print('deleting indexes')
 exe_in_mysql('delete from fno_lot_size where STOCK_SYMBOL in (\'NIFTY\', \'BANKNIFTY\', \'FINNIFTY\')')
 # write_to_gsheet
 print('Writing to gsheet')
-fno_stocks_lot_prices = read_from_mysql("select d.LIQUID_SNO,STOCK_SYMBOL,LOT_SIZE, LTP \
+fno_stocks_lot_prices = read_from_mysql("select d.LIQUIDITY_RATING,d.LIQUID_SNO,STOCK_SYMBOL,LOT_SIZE, LTP \
                                           , LOT_CURRENT_PRICE,INSERT_TS \
                                           from v_fno_stocks_lots_prices t \
                           inner join mystocks.v_options_oi_live_data d on t.STOCK_SYMBOL = d.SCRIP")
 fno_stocks_lot_prices_df = pd.DataFrame(fno_stocks_lot_prices
-                                         , columns=['LIQUID_SNO','STOCK_SYMBOL', 'LOT_SIZE'
+                                         , columns=['LIQUIDITY_RATING','LIQUID_SNO','STOCK_SYMBOL', 'LOT_SIZE'
                                                     , 'LTP','LOT_CURRENT_PRICE','INSERT_TS'])
 write_to_gsheet(fno_stocks_lot_prices_df, 'gstocks-api', 0)
 
@@ -111,7 +111,7 @@ def margin_calculator_wrapper():
 
     df = pd.DataFrame(l1, columns=['EXP_MONTH', 'EXP_DATE', 'underlying', 'strikePrice', 'underlyingValue', 'lastPrice', 'PCT_ROI', 'LOT_SIZE',
                                     'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT',
-                                    'HIGHEST_OI_STRIKE_PRICE','HIGHEST_OI_OPEN_INTEREST'])
+                                    'HIGHEST_OI_STRIKE_PRICE','HIGHEST_OI_OPEN_INTEREST','MAX_PROFIT','LIQUIDITY_RATING'])
     print(df)
 
     print(type(df))
@@ -127,7 +127,7 @@ def margin_calculator_wrapper():
 
     df2 = pd.DataFrame(l2, columns=['EXP_MONTH', 'EXP_DATE', 'underlying', 'strikePrice', 'underlyingValue', 'lastPrice', 'PCT_ROI', 'LOT_SIZE',
                                     'LIQUID_SNO', 'PCT_ABOVE', 'TOTAL_MARGIN_AMT', 'TOTAL_REQUIRED_AMT', 'TOTAL_PREMIUM_AMT',
-                                    'HIGHEST_OI_STRIKE_PRICE','HIGHEST_OI_OPEN_INTEREST'])
+                                    'HIGHEST_OI_STRIKE_PRICE','HIGHEST_OI_OPEN_INTEREST','MAX_DISCOUNT','LIQUIDITY_RATING'])
     print(df2)
 
     print(type(df2))

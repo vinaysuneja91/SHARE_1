@@ -16,6 +16,7 @@ from datetime import datetime, date
 from pytz import timezone
 format = "%Y-%m-%d %H:%M:%S %Z%z"
 from date_time_module import now_asia
+from gsheets import write_to_gsheet
 # Current time in UTC
 #now_utc = datetime.now(timezone('UTC'))
 #now_asia = now_utc.astimezone(timezone('Asia/Kolkata'))
@@ -29,16 +30,21 @@ from date_time_module import now_asia
 # print('Table Truncated')
 
 print("Starting Program")
-bse_list1 = get_bse_list()
-# bse_list2, bse_stock_symbol_list = get_bse_list_scrip()
-bse_list2 = get_bse_list_scrip()
 
-bse_list = bse_list2 + bse_list1
+print('Loading BSE Stocks List')
+get_bse_list()
+# bse_list2, bse_stock_symbol_list = get_bse_list_scrip()
+#bse_list2 = get_bse_list_scrip()
+
+#bse_list = bse_list2 + bse_list1
 # print("Total records in bse -" + str(len(bse_list)))
 
 list1 = []
 
+print('Loading NSE Stocks List')
 nse_list = get_stock_symbol()
+nse_list_df = pd.DataFrame(nse_list, columns=['STOCK_SYMBOL'])
+write_to_mysql(nse_list_df, 't_nse_raw_list', 'replace')
 
 #query_result = read_from_mysql(
 #    'select SCRIP from iwu_master where SCRIP is not null')
@@ -51,27 +57,31 @@ nse_list = get_stock_symbol()
 
 
 # nse_list = []
-print("Total records in nse -" + str(len(nse_list)))
+#print("Total records in nse -" + str(len(nse_list)))
 #print("Total records in IWU List -" + str(len(IWU_SCRIP_LIST)))
-print("Total records in bse -" + str(len(bse_list)))
+#print("Total records in bse -" + str(len(bse_list)))
 
-# stock_list = bse_list1 + bse_list2 + nse_list
+stock_list = read_from_mysql("select STOCK_SYMBOL from v_stock_symbol_finology")
+
+
+#stock_list = bse_list1 + bse_list2 + nse_list
+print(len(stock_list))
 #stock_list = bse_list2[:5] + nse_list[:5]
 # stock_list = bse_list2 + nse_list
 # stock_list = nse_list + IWU_SCRIP_LIST + bse_list
-stock_list = nse_list
+#stock_list = nse_list
 # stock_list = bse_list1
 # stock_list = IWU_SCRIP_LIST
 # stock_list = ['CHEMCON']
 
-#stock_list = stock_list[:5]
-# stock_list = ['RBLBANK']
+#stock_list = stock_list[:10]
+#stock_list = ['INFY']
+#print(stock_list)
 
-stock_list = list(dict.fromkeys(stock_list))
+#deduplicating list 
+#stock_list = list(dict.fromkeys(stock_list))
 
-total_api_calls = len(stock_list)
-
-# stock_list = stock_list[:50]
+#stock_list = stock_list[:50]
 # stock_symbol = bse_list2
 # sampling
 # stock_list = ['BAJFINANCE', 'SCRIP-100034']
@@ -81,16 +91,22 @@ total_api_calls = len(stock_list)
 print('writing stock list to master table')
 stock_list_df = pd.DataFrame(stock_list, columns=['STOCK_SYMBOL'])
 index_list = ['NIFTY', 'BANKNIFTY']  # , 'NIFTY FIN SERVICE']
-index_list_df = pd.DataFrame(index_list)
-#stock_list_df = pd.DataFrame(index_list, columns=['STOCK_SYMBOL'])
+index_list_df = pd.DataFrame(index_list, columns=['STOCK_SYMBOL'])
 stock_list_df = stock_list_df.append(index_list_df)
 write_to_mysql(stock_list_df, 't_stock_symbol_master', 'replace')
+
+stock_list = stock_list_df['STOCK_SYMBOL'].values.tolist()
+print(stock_list)
 
 # writing fno stocklist into fno master table
 #print('writing fno stock list to master table')
 #fno_lot_size = fno_lot_sizes()
 #print(fno_lot_size)
 
+
+
+
+total_api_calls = len(stock_list)
 
 # Starting finology
 print("Total Api calls -" + str(total_api_calls))
@@ -133,7 +149,7 @@ for stock in stock_list:
     sector = finology_sector(soup)
     # print(sector)
 
-    market_cap, div_yield, debt, promoter_holding = finology_promoter_holding(
+    market_cap, div_yield, debt, promoter_holding, price_book = finology_promoter_holding(
         soup)
     # print(market_cap, promoter_holding)
     icr = finology_icr(soup)
@@ -157,7 +173,7 @@ for stock in stock_list:
 
 
 # combining columns together
-    tup1 = (now_asia, sector, stock_symbol, stock_name, market_cap, div_yield, debt, icr, promoter_holding, pledged_holding,
+    tup1 = (now_asia, sector, stock_symbol, stock_name, market_cap, div_yield, debt, icr, promoter_holding, price_book, pledged_holding,
             rating_final, valuation_rating, ownership_rating, efficiency_rating, financial_rating, _52_high, _52_low, ltp,
             sales_growth[0], sales_growth[1], sales_growth[2],
             profit_growth[0], profit_growth[1], profit_growth[2],
@@ -177,7 +193,7 @@ for stock in stock_list:
 
 
 data_out = pd.DataFrame(
-    list1, columns=['INSERT_TS', 'SECTOR', 'STOCK_SYMBOL', 'STOCK_NAME', 'MARKET_CAP_CR', 'DIV_YIELD', 'DEBT', 'ICR', 'PROMOTER_HOLDING', 'PLEDGED_HOLDING',  'RATING', 'VALUATION_RATING', "OWNERSHIP_RATING", 'EFFICIENCY_RATING', 'FINANCIAL_RATING', '_52_W_HIGH', '_52_W_LOW', 'LTP',
+    list1, columns=['INSERT_TS', 'SECTOR', 'STOCK_SYMBOL', 'STOCK_NAME', 'MARKET_CAP_CR', 'DIV_YIELD', 'DEBT', 'ICR', 'PROMOTER_HOLDING','PRICE_BOOK', 'PLEDGED_HOLDING',  'RATING', 'VALUATION_RATING', "OWNERSHIP_RATING", 'EFFICIENCY_RATING', 'FINANCIAL_RATING', '_52_W_HIGH', '_52_W_LOW', 'LTP',
                     'SG_1_YR', 'SG_3_YR', 'SG_5_YR',
                     'PG_1_YR', 'PG_3_YR', 'PG_5_YR',
                     'ROE_1_YR', 'ROE_3_YR', 'ROE_5_YR',
@@ -197,6 +213,8 @@ data_out[['PEG_RATIO']] = data_out[['PEG_RATIO']].apply(pd.to_numeric)
 data_out[['ICR']] = data_out[['ICR']].apply(pd.to_numeric)
 data_out[['PROMOTER_HOLDING']] = data_out[[
     'PROMOTER_HOLDING']].apply(pd.to_numeric)
+data_out[['PRICE_BOOK']] = data_out[[
+    'PRICE_BOOK']].apply(pd.to_numeric)
 data_out[['PLEDGED_HOLDING']] = data_out[[
     'PLEDGED_HOLDING']].apply(pd.to_numeric)
 data_out[['RATING']] = data_out[['RATING']].apply(pd.to_numeric)
@@ -273,7 +291,7 @@ print("Total Records in df-", total_rows)
 
 # output to csv
 # df_data.to_csv(r'output.csv', index=False)
-write_to_csv(data_out, 'stock_detail')
+#write_to_csv(data_out, 'stock_detail')
 
 # output to mysql
 write_to_mysql(data_out, 'stocks_detail', 'replace')
@@ -298,38 +316,107 @@ write_to_mysql(india_vix, 'india_vix', 'replace')
 
 
 # uploading my watchlist
-filename = "watchlist_codes.csv"
+#filename = "watchlist_codes.csv"
 # username = filename[0:6]
-
-watchlist_df = read_from_csv(filename)
-
-watchlist_df_filtered = watchlist_df[watchlist_df['SUB_SOURCE'] != 'X']
-
-print(watchlist_df_filtered.head())
+#watchlist_df = read_from_csv(filename)
+#watchlist_df_filtered = watchlist_df[watchlist_df['SUB_SOURCE'] != 'X']
+#print(watchlist_df_filtered.head())
 
 # write to mysql
-write_to_mysql(watchlist_df_filtered, 'my_watchlist', 'replace')
+#write_to_mysql(watchlist_df_filtered, 'my_watchlist', 'replace')
 
 
 # send message to telegram group
 # read stocks from mysql
-today = date.today()
-text = f"Good Stocks at Value Prices for {today}"
-print(text)
-test = telegram_bot_sendtext(text)
-print(test)
+#today = date.today()
+#text = f"Good Stocks at Value Prices for {today}"
+#print(text)
+#test = telegram_bot_sendtext(text)
+#print(test)
 
-value_stocks_list = read_from_mysql(
+#value_stocks_list = read_from_mysql(
     # "SELECT GROUP_CONCAT(STOCK_SYMBOL,' Rs-',round(LTP,0)) AS 'STOCKS' from V_FINOLOGY_BEST")
-    "SELECT CONCAT(STOCK_SYMBOL,' @',round(LTP,0)) AS 'STOCKS' from V_FINOLOGY_BEST LIMIT 5")
-print(value_stocks_list)
-res = [''.join(i) for i in value_stocks_list]
-print(res)
-for text in res:
-    print(text)
-    test = telegram_bot_sendtext(text)
-    print(test)
+#    "SELECT CONCAT(STOCK_SYMBOL,' @',round(LTP,0)) AS 'STOCKS' from V_FINOLOGY_BEST LIMIT 5")
+#print(value_stocks_list)
+#res = [''.join(i) for i in value_stocks_list]
+#print(res)
+#for text in res:
+#    print(text)
+#    test = telegram_bot_sendtext(text)
+#    print(test)
 
     # str1 = " "
     # text = str1.join(res)
     # print(text)
+
+###### writing IW_ranking view to gsheet
+print('Reading IW_ranking view')
+l1 = read_from_mysql('select * from v_iw_ranking')
+#l1_col = read_from_mysql(
+#        '''SELECT CONCAT("'",COLUMN_NAME,"',") FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='mystocks' AND TABLE_NAME='v_iw_ranking';''')
+#print(l1_col)
+
+df = pd.DataFrame(l1, columns=['SNO',
+'INSERT_TS',
+'SECTOR',
+'STOCK_SYMBOL',
+'STOCK_NAME',
+'MARKET_CAP_CR',
+'DIV_YIELD',
+'DEBT',
+'ICR',
+'PROMOTER_HOLDING',
+'PRICE_BOOK',
+'PLEDGED_HOLDING',
+'RATING',
+'VALUATION_RATING',
+'OWNERSHIP_RATING',
+'EFFICIENCY_RATING',
+'FINANCIAL_RATING',
+'_52_W_HIGH',
+'_52_W_LOW',
+'LTP',
+'SG_1_YR',
+'SG_3_YR',
+'SG_5_YR',
+'PG_1_YR',
+'PG_3_YR',
+'PG_5_YR',
+'ROE_1_YR',
+'ROE_3_YR',
+'ROE_5_YR',
+'ROCE_1_YR',
+'ROCE_3_YR',
+'ROCE_5_YR',
+'CASH_FLOW_TREND',
+'LATEST_CASH_FLOW',
+'CASH_FLOW_MINUS_1',
+'CASH_FLOW_MINUS_2',
+'CASH_FLOW_MINUS_3',
+'CASH_FLOW_MINUS_4',
+'NET_PROFIT_TREND',
+'LATEST_NET_PROFIT',
+'NET_PROFIT_MINUS_1',
+'NET_PROFIT_MINUS_2',
+'NET_PROFIT_MINUS_3',
+'NET_PROFIT_MINUS_4',
+'PEG_RATIO',
+'URL',
+'DEBT_TO_EQUITY',
+'MARKET_CAP_FILTER',
+'SECTOR_ROCE_RANK',
+'SECTOR_SG_RANK',
+'SECTOR_PRICE_BOOK_RANK',
+'SECTOR_WISE_RANK',
+'MARKET_CAP_ROCE_RANK',
+'MARKET_CAP_SG_RANK',
+'MARKET_CAP_PRICE_BOOK_RANK',
+'MARKET_CAP_WISE_RANK'])
+print(df)
+
+print(type(df))
+
+# write_to_gsheet
+print('Writing to gsheet')
+write_to_gsheet(df, 'gstocks-api', 7)
+
